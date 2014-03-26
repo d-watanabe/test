@@ -219,9 +219,9 @@ $CALL_GROUP_ARRAY['group2']['NUMBER_LIST']='810123456789,811234567890';  </p>
 </ul><h2>
 <a name="%E5%AE%9F%E8%A1%8C%E6%96%B9%E6%B3%95" class="anchor" href="#%E5%AE%9F%E8%A1%8C%E6%96%B9%E6%B3%95"><span class="octicon octicon-link"></span></a>実行方法</h2>
 
-<p>call-request.phpに引数として、"グループ名"、"ホスト名"、"トリガー名"を渡して実行する。</p>
+<p>Zabbixから[設定]-&gt;[アクション]-&gt;[アクションの実行内容]にて、下記のようにcall-request.phpに引数として、"グループ名"、"ホスト名"、"トリガー名"を渡して実行するようにする。</p>
 
-<pre><code># php call-request.php "group1" "host1" "trigger"
+<pre><code>/usr/bin/php /var/www/html/rest/call-request.php "gg1" "{HOST.NAME1}" "{TRIGGER.NAME}"
 </code></pre>
       </section>
       <footer>
