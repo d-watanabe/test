@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Test by d-watanabe</title>
+    <title>Test　Twilio_Zabbix by d-watanabe</title>
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
@@ -16,8 +16,8 @@
   <body>
     <div class="wrapper">
       <header>
-        <h1 class="header">Test</h1>
-        <p class="header">test</p>
+        <h1 class="header">Test　Twilio_Zabbix</h1>
+        <p class="header">Test　Use Twilio in Zabbix</p>
 
         <ul>
           <li class="download"><a class="buttons" href="https://github.com/d-watanabe/test/zipball/master">Download ZIP</a></li>
@@ -30,37 +30,199 @@
 
       </header>
       <section>
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+        <h1>
+<a name="%E6%A6%82%E8%A6%81" class="anchor" href="#%E6%A6%82%E8%A6%81"><span class="octicon octicon-link"></span></a>概要</h1>
 
-<p>Test</p>
+<hr><p>call-request.phpに引数として、"グループ名"、"ホスト名"、"トリガー名"を渡すと、twilio_call関数を実行し、Twilioが連絡先に電話を掛ける。<br>
+電話はtwilio_zabbix.phpに設定したパラメータを元に、連絡先に順番に電話を掛ける。<br>
+ユーザが応答すると、設定されたメッセージを流して通話を切断する。  </p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
+<h2>
+<a name="%E4%BD%BF%E7%94%A8%E3%81%99%E3%82%8B%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB" class="anchor" href="#%E4%BD%BF%E7%94%A8%E3%81%99%E3%82%8B%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB"><span class="octicon octicon-link"></span></a>使用するファイル</h2>
+
+<table>
+<thead><tr>
+<th>ファイル名</th>
+<th>説明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>call-request.php</td>
+<td>パラメータのチェックとtwilio_call関数（コール処理を実行する関数）へ引数を渡す処理を行う</td>
+</tr>
+<tr>
+<td>call-function.php</td>
+<td>コール処理とログ出力処理を行う関数が定義されている</td>
+</tr>
+<tr>
+<td>twilio_zabbix.php</td>
+<td>必要なパラメータを設定</td>
+</tr>
+<tr>
+<td>calllog.log</td>
+<td>ログ出力先ファイル。ログの出力形式については、表下に記載する。</td>
+</tr>
+<tr>
+<td>Serviceディレクトリ</td>
+<td>Twilio PHP libraryのディレクトリ</td>
+</tr>
+</tbody>
+</table><blockquote>
+<p>ログ形式：<br>
+日時は、"yyyy/mm/dd hh:mm:ss"の書式で出力する。<br>
+・エラーの場合<br>
+発生日時 エラー内容<br>
+・Twilioのコール結果<br>
+発生日時 グループ名 FROM TO コール開始時間 コール終了時間 コールリトライ回数 コールステータス sleep_time call-request.phpが受け取った引数の数  </p>
+</blockquote>
+
+<h2>
+<a name="%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E8%A8%AD%E7%BD%AE%E5%A0%B4%E6%89%80" class="anchor" href="#%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E8%A8%AD%E7%BD%AE%E5%A0%B4%E6%89%80"><span class="octicon octicon-link"></span></a>ファイル設置場所</h2>
+
+<table>
+<thead><tr>
+<th>設置場所</th>
+<th>ファイル名</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>/var/www/html/rest/</td>
+<td>call-request.php、call-function.php、Serviceディレクトリ</td>
+</tr>
+<tr>
+<td>/var/lib/zabbix/</td>
+<td>twilio_zabbix.php</td>
+</tr>
+<tr>
+<td>/var/log/zabbix/</td>
+<td>calllog.log</td>
+</tr>
+</tbody>
+</table><h2>
+<a name="%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%AA%AC%E6%98%8E" class="anchor" href="#%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%AA%AC%E6%98%8E"><span class="octicon octicon-link"></span></a>パラメータ説明</h2>
+
+<p>twilio_zabbix.phpは、call-request.phpにて使用するパラメータを設定しているファイル。<br>
+パラメータを変更することで、連絡先電話番号や流すメッセージを設定する。</p>
+
+<table>
+<thead><tr>
+<th>パラメータ名</th>
+<th>説明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>$ACCOUNT_SID</td>
+<td>TwilioアカウントのACCOUNT SIDを設定</td>
+</tr>
+<tr>
+<td>$AUTH_TOKEN</td>
+<td>TwilioアカウントのAUTH_TOKENを設定</td>
+</tr>
+<tr>
+<td>$FROM_NUMBER</td>
+<td>コールするTwilioの電話番号</td>
+</tr>
+<tr>
+<td>$CALL_GROUP_ARRAY</td>
+<td>グループ名毎に'REPEAT'に設定した回数だけ通話スクリーニングを実施する。 コール先は、'NUMBER_LIST'に設定した番号である。例を表下に記載する。</td>
+</tr>
+<tr>
+<td>$CALL_TIME</td>
+<td>何秒間コールするかを設定</td>
+</tr>
+<tr>
+<td>$SLEEP_TIME</td>
+<td>電話の応答がなかった場合に次の電話番号にコールするまでの待機時間を設定（秒）</td>
+</tr>
+<tr>
+<td>$MESSAGE_REPEAT</td>
+<td>$MESSAGESの内容を流す回数を設定</td>
+</tr>
+<tr>
+<td>$MESSAGES</td>
+<td>電話応答があった場合に流すメッセージを設定。引数の値をメッセージに含めたい場合は、置き換える部分に$ARGV2$,$ARGV3$のように置き換え文字列を設定する。置き換え文字列は'$ARGVx$'の形式で、'x'の部分は1からの連番を設定し、メッセージの中で同じ番号は使用できない。</td>
+</tr>
+</tbody>
+</table><blockquote>
+<p>例）<br>
+$CALL_GROUP_ARRAY['group1']['REPEAT']='2';<br>
+$CALL_GROUP_ARRAY['group1']['NUMBER_LIST']='810123456789,811234567890';<br>
+$CALL_GROUP_ARRAY['group2']['REPEAT']='3';<br>
+$CALL_GROUP_ARRAY['group2']['NUMBER_LIST']='810123456789,811234567890';  </p>
+</blockquote>
+
+<h2>
+<a name="%E9%96%A2%E6%95%B0%E8%AA%AC%E6%98%8E" class="anchor" href="#%E9%96%A2%E6%95%B0%E8%AA%AC%E6%98%8E"><span class="octicon octicon-link"></span></a>関数説明</h2>
+
+<p>call-function.phpには、以下の関数が定義されている。関数に渡している引数については、下の表を参照。</p>
+
+<table>
+<thead><tr>
+<th>関数名</th>
+<th>説明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>twilio_call ($client, $GROUP_NAME, $CALL_COUNT, $FROM_NUMBER, $NUMBER_LIST_NUMBER, $twilioMessages, $CALL_TIME, $SLEEP_TIME, $ARGV_COUNT)</td>
+<td>引数を元に、電話を掛ける処理を行う</td>
+</tr>
+<tr>
+<td>twilio_log ($client, $call, $GROUP_NAME, $CALL_COUNT, $SLEEP_TIME, $ARGV_COUNT)</td>
+<td>電話を掛けた結果をログファイルに出力</td>
+</tr>
+<tr>
+<td>error_log_message($error_message)</td>
+<td>ログファイルにエラー内容を書き込む</td>
+</tr>
+</tbody>
+</table><table>
+<thead><tr>
+<th>引数名</th>
+<th>説明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>$client</td>
+<td>TwilioのRESTクライアントをインスタンス化</td>
+</tr>
+<tr>
+<td>$GROUP_NAME</td>
+<td>グループ名</td>
+</tr>
+<tr>
+<td>$CALL_COUNT</td>
+<td>何順目のコール処理かのカウント</td>
+</tr>
+<tr>
+<td>$NUMBER_LIST_NUMBER</td>
+<td>電話の宛先番号</td>
+</tr>
+<tr>
+<td>$twilioMessages</td>
+<td>流すメッセージ内容</td>
+</tr>
+<tr>
+<td>$ARGV_COUNT</td>
+<td>call-request.phpに渡された引数の数</td>
+</tr>
+<tr>
+<td>$call</td>
+<td>コール処理のオブジェクト</td>
+</tr>
+</tbody>
+</table><h2>
+<a name="%E5%8B%95%E4%BD%9C%E7%A2%BA%E8%AA%8D%E7%92%B0%E5%A2%83" class="anchor" href="#%E5%8B%95%E4%BD%9C%E7%A2%BA%E8%AA%8D%E7%92%B0%E5%A2%83"><span class="octicon octicon-link"></span></a>動作確認環境</h2>
+
+<ul>
+<li>Zabbix 2.2.2</li>
+<li>PHP 5.5.7</li>
+</ul><h2>
+<a name="%E5%AE%9F%E8%A1%8C%E6%96%B9%E6%B3%95" class="anchor" href="#%E5%AE%9F%E8%A1%8C%E6%96%B9%E6%B3%95"><span class="octicon octicon-link"></span></a>実行方法</h2>
+
+<p>call-request.phpに引数として、"グループ名"、"ホスト名"、"トリガー名"を渡して実行する。</p>
+
+<pre><code># php call-request.php "group1" "host1" "trigger"
 </code></pre>
-
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
-
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
       </section>
       <footer>
         <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
