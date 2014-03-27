@@ -22,7 +22,6 @@
         <ul>
           <li class="download"><a class="buttons" href="https://github.com/d-watanabe/test/zipball/master">Download ZIP</a></li>
           <li class="download"><a class="buttons" href="https://github.com/d-watanabe/test/tarball/master">Download TAR</a></li>
-          <li class="download"><a class="buttons" href="https://github.com/d-watanabe/test/tarball/master">Download TAR</a></li>
           <li><a class="buttons github" href="https://github.com/d-watanabe/test">View On GitHub</a></li>
         </ul>
 
@@ -34,9 +33,7 @@
         <h1>
 <a name="%E6%A6%82%E8%A6%81" class="anchor" href="#%E6%A6%82%E8%A6%81"><span class="octicon octicon-link"></span></a>概要</h1>
 
-<hr><p>call-request.phpに引数として、"グループ名"、"ホスト名"、"トリガー名"を渡すと、twilio_call関数を実行し、Twilioが連絡先に電話を掛ける。<br>
-電話はtwilio_zabbix.phpに設定したパラメータを元に、連絡先に順番に電話を掛ける。<br>
-ユーザが応答すると、設定されたメッセージを流して通話を切断する。  </p>
+<hr><p>zabbixと連携して、連絡先に電話を掛けるものになります。</p>
 
 <h2>
 <a name="%E4%BD%BF%E7%94%A8%E3%81%99%E3%82%8B%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB" class="anchor" href="#%E4%BD%BF%E7%94%A8%E3%81%99%E3%82%8B%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB"><span class="octicon octicon-link"></span></a>使用するファイル</h2>
@@ -57,7 +54,7 @@
 </tr>
 <tr>
 <td>twilio_zabbix.php</td>
-<td>必要なパラメータを設定</td>
+<td>必要なパラメータが設定されている</td>
 </tr>
 <tr>
 <td>calllog.log</td>
@@ -65,97 +62,74 @@
 </tr>
 <tr>
 <td>Serviceディレクトリ</td>
-<td>Twilio PHP libraryのディレクトリ</td>
-</tr>
-</tbody>
-</table><blockquote>
-<p>ログ形式：<br>
-日時は、"yyyy/mm/dd hh:mm:ss"の書式で出力する。<br>
-・エラーの場合<br>
-発生日時 エラー内容<br>
-・Twilioのコール結果<br>
-発生日時 グループ名 FROM TO コール開始時間 コール終了時間 コールリトライ回数 コールステータス sleep_time call-request.phpが受け取った引数の数  </p>
-</blockquote>
-
-<h2>
-<a name="%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E8%A8%AD%E7%BD%AE%E5%A0%B4%E6%89%80" class="anchor" href="#%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E8%A8%AD%E7%BD%AE%E5%A0%B4%E6%89%80"><span class="octicon octicon-link"></span></a>ファイル設置場所</h2>
-
-<table>
-<thead><tr>
-<th>設置場所</th>
-<th>ファイル名</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>/var/www/html/rest/</td>
-<td>call-request.php、call-function.php、Serviceディレクトリ</td>
-</tr>
-<tr>
-<td>/var/lib/zabbix/</td>
-<td>twilio_zabbix.php</td>
-</tr>
-<tr>
-<td>/var/log/zabbix/</td>
-<td>calllog.log</td>
+<td>Twilio API library(PHP)のディレクトリ。 公式ページからダウンロードする。 <a href="https://github.com/twilio/twilio-php/archive/latest.zip">Twilio API Library(PHP)</a>
+</td>
 </tr>
 </tbody>
 </table><h2>
-<a name="%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%AA%AC%E6%98%8E" class="anchor" href="#%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%AA%AC%E6%98%8E"><span class="octicon octicon-link"></span></a>パラメータ説明</h2>
+<a name="%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E8%AA%AC%E6%98%8E" class="anchor" href="#%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E8%AA%AC%E6%98%8E"><span class="octicon octicon-link"></span></a>ファイル説明</h2>
 
-<p>twilio_zabbix.phpは、call-request.phpにて使用するパラメータを設定しているファイル。<br>
-パラメータを変更することで、連絡先電話番号や流すメッセージを設定する。</p>
+<h3>
+<a name="call-requestphp" class="anchor" href="#call-requestphp"><span class="octicon octicon-link"></span></a>call-request.php</h3>
+
+<p>call-request.phpは、渡された引数とtwilio_zabbix.phpのパラメータの確認を行った後に、コール処理を行う関数を実行します。<br>
+引数などの確認で問題があった場合は、以下のエラー番号を返します。</p>
 
 <table>
 <thead><tr>
-<th>パラメータ名</th>
-<th>説明</th>
+<th>エラー番号</th>
+<th>エラー内容</th>
 </tr></thead>
 <tbody>
 <tr>
-<td>$ACCOUNT_SID</td>
-<td>TwilioアカウントのACCOUNT SIDを設定</td>
+<td>1</td>
+<td>call-request.phpに渡された引数の数に誤りがある</td>
 </tr>
 <tr>
-<td>$AUTH_TOKEN</td>
-<td>TwilioアカウントのAUTH_TOKENを設定</td>
+<td>2</td>
+<td>call-request.phpに渡された第一引数のグループ名が$CALL_GROUP_ARRAYに存在しない</td>
 </tr>
 <tr>
-<td>$FROM_NUMBER</td>
-<td>コールするTwilioの電話番号</td>
+<td>3</td>
+<td>$FROM_NUMBERの最初一文字が+ではない</td>
 </tr>
 <tr>
-<td>$CALL_GROUP_ARRAY</td>
-<td>グループ名毎に'REPEAT'に設定した回数だけ通話スクリーニングを実施する。 コール先は、'NUMBER_LIST'に設定した番号である。番号は",(カンマ)"区切りで複数設定できる。例を表下に記載する。</td>
+<td>4</td>
+<td>$FROM_NUMBERの+以降が数値ではない</td>
 </tr>
 <tr>
-<td>$CALL_TIME</td>
-<td>何秒間コールするかを設定</td>
+<td>5</td>
+<td>$CALL_GROUP_ARRAY['グループ名']['REPEAT']の値が数値ではない</td>
 </tr>
 <tr>
-<td>$SLEEP_TIME</td>
-<td>電話の応答がなかった場合に次の電話番号にコールするまでの待機時間を設定（秒）</td>
+<td>6</td>
+<td>$CALL_TIMEの値が数値ではない</td>
 </tr>
 <tr>
-<td>$MESSAGE_REPEAT</td>
-<td>$MESSAGESの内容を流す回数を設定</td>
+<td>7</td>
+<td>$SLEEP_TIMEの値が数値ではない</td>
 </tr>
 <tr>
-<td>$MESSAGES</td>
-<td>電話応答があった場合に流すメッセージを設定。引数の値をメッセージに含めたい場合は、置き換える部分に$ARGV2$,$ARGV3$のように置き換え文字列を設定する。置き換え文字列は'$ARGVx$'の形式で、'x'の部分は1からの連番を設定し、メッセージの中で同じ番号は使用できない。</td>
+<td>8</td>
+<td>$MESSAGE_REPEATの値が数値ではない</td>
+</tr>
+<tr>
+<td>9</td>
+<td>$MESSAGESに含まれる$ARGVx$の数と引数の数(argv[0],argv[1]を除く)が一致しない</td>
+</tr>
+<tr>
+<td>10</td>
+<td>$CALL_GROUP_ARRAY['グループ名']['NUMBER_LIST']の値が数値ではない</td>
+</tr>
+<tr>
+<td>11</td>
+<td>$CALL_GROUP_ARRAY['グループ名']['NUMBER_LIST']の値が日本向けの電話番号ではない</td>
 </tr>
 </tbody>
-</table><blockquote>
-<p>例）<br>
-$CALL_GROUP_ARRAY['group1']['REPEAT']='2';<br>
-$CALL_GROUP_ARRAY['group1']['NUMBER_LIST']='810123456789,811234567890';<br>
-$CALL_GROUP_ARRAY['group2']['REPEAT']='3';<br>
-$CALL_GROUP_ARRAY['group2']['NUMBER_LIST']='810123456789,811234567890';  </p>
-</blockquote>
+</table><h3>
+<a name="call-functionphp" class="anchor" href="#call-functionphp"><span class="octicon octicon-link"></span></a>call-function.php</h3>
 
-<h2>
-<a name="%E9%96%A2%E6%95%B0%E8%AA%AC%E6%98%8E" class="anchor" href="#%E9%96%A2%E6%95%B0%E8%AA%AC%E6%98%8E"><span class="octicon octicon-link"></span></a>関数説明</h2>
-
-<p>call-function.phpには、以下の関数が定義されている。関数に渡している引数については、下の表を参照。</p>
+<p>call-function.phpには、以下の関数が定義されています。関数に渡している引数については、下の表を参照。</p>
 
 <table>
 <thead><tr>
@@ -215,6 +189,97 @@ $CALL_GROUP_ARRAY['group2']['NUMBER_LIST']='810123456789,811234567890';  </p>
 <td>エラーメッセージ</td>
 </tr>
 </tbody>
+</table><h3>
+<a name="twilio_zabbixphp" class="anchor" href="#twilio_zabbixphp"><span class="octicon octicon-link"></span></a>twilio_zabbix.php</h3>
+
+<p>twilio_zabbix.phpは、call-request.phpにて使用するパラメータを設定しているファイルです。<br>
+パラメータを変更することで、連絡先電話番号や流すメッセージを設定できます。</p>
+
+<table>
+<thead><tr>
+<th>パラメータ名</th>
+<th>説明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>$ACCOUNT_SID</td>
+<td>TwilioアカウントのACCOUNT SID</td>
+</tr>
+<tr>
+<td>$AUTH_TOKEN</td>
+<td>TwilioアカウントのAUTH_TOKEN</td>
+</tr>
+<tr>
+<td>$FROM_NUMBER</td>
+<td>Twilioアカウントに紐づいたTwilioの電話番号</td>
+</tr>
+<tr>
+<td>$CALL_GROUP_ARRAY</td>
+<td>グループ名毎に'REPEAT'に設定した回数だけ通話スクリーニングを実施する。 コール先は、'NUMBER_LIST'に設定した番号である。番号は",(カンマ)"区切りで複数設定できる。例を表下に記載する。</td>
+</tr>
+<tr>
+<td>$CALL_TIME</td>
+<td>何秒間コールするか</td>
+</tr>
+<tr>
+<td>$SLEEP_TIME</td>
+<td>電話の応答がなかった場合に次の電話番号にコールするまでの待機時間（秒）</td>
+</tr>
+<tr>
+<td>$MESSAGE_REPEAT</td>
+<td>$MESSAGESの内容を流す回数</td>
+</tr>
+<tr>
+<td>$MESSAGES</td>
+<td>電話応答があった場合に流すメッセージを設定。 引数の値をメッセージに含めたい場合は、置き換える部分に$ARGV2$,$ARGV3$のように置き換え文字列を設定する。置き換え文字列は'$ARGVx$'の形式で、'x'の部分は1からの連番を設定し、メッセージの中で同じ番号は使用できない。 メッセージ中で連続した数字"10-1234-5678"があった場合、発音が"ジュウ センニヒャクサンジュウヨン ゴセンロッピャクナナジュウハチ"となるので、句読点などを入れて分割する必要がある。</td>
+</tr>
+</tbody>
+</table><blockquote>
+<p>例）<br>
+$CALL_GROUP_ARRAY['group1']['REPEAT']='2';<br>
+$CALL_GROUP_ARRAY['group1']['NUMBER_LIST']='810123456789,811234567890';<br>
+$CALL_GROUP_ARRAY['group2']['REPEAT']='3';<br>
+$CALL_GROUP_ARRAY['group2']['NUMBER_LIST']='810123456789,811234567890';  </p>
+</blockquote>
+
+<h3>
+<a name="callloglog" class="anchor" href="#callloglog"><span class="octicon octicon-link"></span></a>calllog.log</h3>
+
+<p>calllog.logは、Twilioのコール結果や、引数確認等のエラー内容を下記の形式で書き込まれます。</p>
+
+<blockquote>
+<p>ログ形式：<br>
+日時は、"yyyy/mm/dd hh:mm:ss"の書式で出力します。<br>
+・エラーの場合<br>
+発生日時 エラー内容<br>
+・Twilioのコール結果<br>
+発生日時 グループ名 FROM TO コール開始時間 コール終了時間 コールリトライ回数 コールステータス sleep_time call-request.phpが受け取った引数の数  </p>
+</blockquote>
+
+<h2>
+<a name="%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E8%A8%AD%E7%BD%AE%E5%A0%B4%E6%89%80" class="anchor" href="#%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E8%A8%AD%E7%BD%AE%E5%A0%B4%E6%89%80"><span class="octicon octicon-link"></span></a>ファイル設置場所</h2>
+
+<p>各ファイルは、以下のように設置する必要があります。（ログファイルは、スクリプトを実行すると自動で作成されます。）</p>
+
+<table>
+<thead><tr>
+<th>設置場所</th>
+<th>ファイル名</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>/var/www/html/rest/</td>
+<td>call-request.php、call-function.php、Serviceディレクトリ</td>
+</tr>
+<tr>
+<td>/var/lib/zabbix/</td>
+<td>twilio_zabbix.php</td>
+</tr>
+<tr>
+<td>/var/log/zabbix/</td>
+<td>calllog.log</td>
+</tr>
+</tbody>
 </table><h2>
 <a name="%E5%8B%95%E4%BD%9C%E7%A2%BA%E8%AA%8D%E7%92%B0%E5%A2%83" class="anchor" href="#%E5%8B%95%E4%BD%9C%E7%A2%BA%E8%AA%8D%E7%92%B0%E5%A2%83"><span class="octicon octicon-link"></span></a>動作確認環境</h2>
 
@@ -225,6 +290,8 @@ $CALL_GROUP_ARRAY['group2']['NUMBER_LIST']='810123456789,811234567890';  </p>
 <a name="%E5%AE%9F%E8%A1%8C%E6%96%B9%E6%B3%95" class="anchor" href="#%E5%AE%9F%E8%A1%8C%E6%96%B9%E6%B3%95"><span class="octicon octicon-link"></span></a>実行方法</h2>
 
 <p>Zabbixから[設定]-&gt;[アクション]-&gt;[アクションの実行内容]にて、下記のようにcall-request.phpに引数として、"グループ名"、"ホスト名"、"トリガー名"を渡して実行するようにする。</p>
+
+<p><img src="https://github.com/d-watanabe/test/raw/master/Image1.png" alt="zabbix01"></p>
 
 <pre><code>/usr/bin/php /var/www/html/rest/call-request.php "group1" "{HOST.NAME1}" "{TRIGGER.NAME}"
 </code></pre>
