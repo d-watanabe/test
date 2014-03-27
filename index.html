@@ -34,8 +34,13 @@
         <h1>
 <a name="%E6%A6%82%E8%A6%81" class="anchor" href="#%E6%A6%82%E8%A6%81"><span class="octicon octicon-link"></span></a>概要</h1>
 
-<hr><p>Zabbixと連携して、指定した連絡先に電話を掛けるものになります。
+<hr><p>Zabbixと連携して、指定した連絡先に電話を掛けるものになります。<br>
 これにより、Zabbixで障害を検知したら、自動で担当者へ障害が発生したことを電話で伝える事が可能になります。</p>
+
+<h2>
+<a name="%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%83%8E%E3%83%BC%E3%83%88" class="anchor" href="#%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%83%8E%E3%83%BC%E3%83%88"><span class="octicon octicon-link"></span></a>リリースノート</h2>
+
+<p>2014/03/28 ver.1.0  </p>
 
 <h2>
 <a name="%E4%BD%BF%E7%94%A8%E3%81%99%E3%82%8B%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB" class="anchor" href="#%E4%BD%BF%E7%94%A8%E3%81%99%E3%82%8B%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB"><span class="octicon octicon-link"></span></a>使用するファイル</h2>
@@ -160,7 +165,7 @@
 <tbody>
 <tr>
 <td>$client</td>
-<td>TwilioのRESTクライアントをインスタンス化</td>
+<td>TwilioのRESTクライアントインスタンス</td>
 </tr>
 <tr>
 <td>$GROUP_NAME</td>
@@ -247,7 +252,7 @@ $CALL_GROUP_ARRAY['group2']['NUMBER_LIST']='810123456789,811234567890';  </p>
 <h3>
 <a name="callloglog" class="anchor" href="#callloglog"><span class="octicon octicon-link"></span></a>calllog.log</h3>
 
-<p>calllog.logは、Twilioのコール結果や、引数確認等のエラー内容を下記の形式で書き込まれるログファイルです。</p>
+<p>calllog.logは、Twilioのコール結果や、引数確認等のエラー内容を下記の形式で書き込まれます。</p>
 
 <blockquote>
 <p>ログ形式：<br>
@@ -291,12 +296,48 @@ $CALL_GROUP_ARRAY['group2']['NUMBER_LIST']='810123456789,811234567890';  </p>
 </ul><h2>
 <a name="%E5%AE%9F%E8%A1%8C%E6%96%B9%E6%B3%95" class="anchor" href="#%E5%AE%9F%E8%A1%8C%E6%96%B9%E6%B3%95"><span class="octicon octicon-link"></span></a>実行方法</h2>
 
-<p>Zabbixから[設定]-&gt;[アクション]-&gt;[アクションの実行内容]にて、下記のようにcall-request.phpに引数として、"グループ名"、"ホスト名"、"トリガー名"を渡して実行するようにする。</p>
+<p>Zabbixから[設定]-&gt;[アクション]-&gt;[アクションの実行内容]にて、下記のようにcall-request.phpに引数として、"グループ名"、"ホスト名"、"トリガー名"を渡して実行するようにしてください。</p>
 
 <p><img src="https://github.com/d-watanabe/test/raw/master/zabbix1.PNG" alt="zabbix01"></p>
 
 <pre><code>/usr/bin/php /var/www/html/rest/call-request.php "group1" "{HOST.NAME1}" "{TRIGGER.NAME}"
 </code></pre>
+
+<h3>
+<a name="%E3%83%88%E3%83%A9%E3%83%96%E3%83%AB%E4%BA%8B%E4%BE%8B" class="anchor" href="#%E3%83%88%E3%83%A9%E3%83%96%E3%83%AB%E4%BA%8B%E4%BE%8B"><span class="octicon octicon-link"></span></a>トラブル事例</h3>
+
+<hr><p>事例1．Zabbixでアラートを検知したが、スクリプトが実行されていない。CLIで実行したところ、以下のエラーが表示された。  </p>
+
+<pre><code>sh: -c: line 0: unexpected EOF while looking for matching `''  
+sh: -c: line 1: syntax error: unexpected end of file
+</code></pre>
+
+<p>解決策1.twilio_zabbix.phpのTwilioアカウント情報に誤りがある場合に発生することが確認されています。<br>
+twilio_zabbix.phpの以下の項目に誤りがないか確認し、修正してください。 </p>
+
+<table>
+<thead><tr>
+<th>パラメータ名</th>
+<th>説明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>$ACCOUNT_SID</td>
+<td>TwilioアカウントのACCOUNT SID</td>
+</tr>
+<tr>
+<td>$AUTH_TOKEN</td>
+<td>TwilioアカウントのAUTH_TOKEN</td>
+</tr>
+<tr>
+<td>$FROM_NUMBER</td>
+<td>Twilioアカウントに紐づいたTwilioの電話番号</td>
+</tr>
+</tbody>
+</table><hr><h4>
+<a name="%E9%80%A3%E7%B5%A1%E5%85%88" class="anchor" href="#%E9%80%A3%E7%B5%A1%E5%85%88"><span class="octicon octicon-link"></span></a>連絡先</h4>
+
+<p>mail : </p>
       </section>
     </div>
 
