@@ -146,7 +146,7 @@
 <tbody>
 <tr>
 <td>twilio_call ($client, $GROUP_NAME, $CALL_COUNT, $FROM_NUMBER, $NUMBER_LIST_NUMBER, $twilioMessages, $CALL_TIME, $SLEEP_TIME, $ARGV_COUNT)</td>
-<td>引数を元に、電話を掛ける処理を行う</td>
+<td>引数を元に、電話を掛ける処理を行う。設定された連絡先に順番にコールし、</td>
 </tr>
 <tr>
 <td>twilio_log ($client, $call, $GROUP_NAME, $CALL_COUNT, $SLEEP_TIME, $ARGV_COUNT)</td>
@@ -221,8 +221,12 @@
 <td>Twilioアカウントに紐づいたTwilioの電話番号</td>
 </tr>
 <tr>
-<td>$CALL_GROUP_ARRAY</td>
-<td>グループ名毎に'REPEAT'に設定した回数だけ通話スクリーニングを実施する。 コール先は、'NUMBER_LIST'に設定した番号である。番号は",(カンマ)"区切りで複数設定できる。例を表下に記載する。</td>
+<td>$CALL_GROUP_ARRAY['groupname']['REPEAT']</td>
+<td>連絡先の電話番号の応答がなかった場合に、何順電話を掛けるか。</td>
+</tr>
+<tr>
+<td>$CALL_GROUP_ARRAY['groupname']['NUMBER_LIST']</td>
+<td>連絡先の電話番号。連絡先は",(カンマ)"区切りで複数設定できる。例を表下に記載する。</td>
 </tr>
 <tr>
 <td>$CALL_TIME</td>
