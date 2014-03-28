@@ -40,9 +40,9 @@
 <h2>
 <a name="%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%83%8E%E3%83%BC%E3%83%88" class="anchor" href="#%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%83%8E%E3%83%BC%E3%83%88"><span class="octicon octicon-link"></span></a>リリースノート</h2>
 
-<p>2014/03/28 ver.1.0  </p>
+<p>2014/mm/dd ver.1.0 初公開  </p>
 
-<h2>
+<hr><h2>
 <a name="%E4%BD%BF%E7%94%A8%E3%81%99%E3%82%8B%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB" class="anchor" href="#%E4%BD%BF%E7%94%A8%E3%81%99%E3%82%8B%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB"><span class="octicon octicon-link"></span></a>使用するファイル</h2>
 
 <table>
@@ -146,7 +146,7 @@
 <tbody>
 <tr>
 <td>twilio_call ($client, $GROUP_NAME, $CALL_COUNT, $FROM_NUMBER, $NUMBER_LIST_NUMBER, $twilioMessages, $CALL_TIME, $SLEEP_TIME, $ARGV_COUNT)</td>
-<td>引数を元に、電話を掛ける処理を行う。設定された連絡先に順番にコールし、</td>
+<td>引数を元に、電話を掛ける処理を行う。</td>
 </tr>
 <tr>
 <td>twilio_log ($client, $call, $GROUP_NAME, $CALL_COUNT, $SLEEP_TIME, $ARGV_COUNT)</td>
@@ -222,7 +222,7 @@
 </tr>
 <tr>
 <td>$CALL_GROUP_ARRAY['groupname']['REPEAT']</td>
-<td>連絡先の電話番号の応答がなかった場合に、何順電話を掛けるか。</td>
+<td>下記'NUMBER_LIST'の連絡先へ順番に電話を掛け、応答がなかった場合に何回電話を掛けるか。</td>
 </tr>
 <tr>
 <td>$CALL_GROUP_ARRAY['groupname']['NUMBER_LIST']</td>
@@ -310,14 +310,16 @@ $CALL_GROUP_ARRAY['group2']['NUMBER_LIST']='810123456789,811234567890';  </p>
 <h3>
 <a name="%E3%83%88%E3%83%A9%E3%83%96%E3%83%AB%E4%BA%8B%E4%BE%8B" class="anchor" href="#%E3%83%88%E3%83%A9%E3%83%96%E3%83%AB%E4%BA%8B%E4%BE%8B"><span class="octicon octicon-link"></span></a>トラブル事例</h3>
 
-<hr><p>事例1．Zabbixでアラートを検知したが、スクリプトが実行されていない。CLIで実行したところ、以下のエラーが表示された。  </p>
+<hr><p>事例1．Zabbixでアラートを検知したが、スクリプトが実行されませんでした。<br>
+calllog.logには特にエラーが書き込まれていなかった為、CLIで実行したところ、以下のエラーが表示されました。<br>
+解決する為にはどこを確認すれば良いでしょうか。  </p>
 
 <pre><code>sh: -c: line 0: unexpected EOF while looking for matching `''  
 sh: -c: line 1: syntax error: unexpected end of file
 </code></pre>
 
-<p>解決策1.twilio_zabbix.phpのTwilioアカウント情報に誤りがある場合に発生することが確認されています。<br>
-twilio_zabbix.phpの以下の項目に誤りがないか確認し、修正してください。 </p>
+<p>解決策.twilio_zabbix.phpのTwilioアカウント情報に誤りがある場合に発生することが確認されています。<br>
+twilio_zabbix.phpの以下の項目に誤りがないか確認し、修正してください。  </p>
 
 <table>
 <thead><tr>
