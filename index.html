@@ -30,43 +30,19 @@
 
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
-    
-    <div class="side-menu">
-        <ul>
-            <li><a href="http://d-watanabe.github.io/test/index.html#about">概要</a></li>
-
-            <li><a href="http://d-watanabe.github.io/test/index.html#releases">リリースノート</a></li>
-
-            <li><a href="http://d-watanabe.github.io/test/index.html#file">使用するファイル</a></li>
-
-            <li><a href="http://d-watanabe.github.io/test/index.html#filedescription">ファイル説明</a></li>
-
-            <li><a href="http://d-watanabe.github.io/test/index.html#installation">ファイル設置場所</a></li>
-
-            <li><a href="http://d-watanabe.github.io/test/index.html#confirmation">動作確認環境</a></li>
-
-            <li><a href="http://d-watanabe.github.io/test/index.html#usage">実行方法</a></li>
-
-            <li><a href="http://d-watanabe.github.io/test/index.html#case">トラブル事例</a></li>
-
-            <li><a href="http://d-watanabe.github.io/test/index.html#contact">連絡先</a></li>
-        </ul>
-</div>
-    
-    
       <section id="main_content" class="inner">
-        <h1 id='about'>
+        <h1>
 <a name="%E6%A6%82%E8%A6%81" class="anchor" href="#%E6%A6%82%E8%A6%81"><span class="octicon octicon-link"></span></a>概要</h1>
 
 <hr><p>Zabbixと連携して、指定した連絡先に電話を掛けるものになります。<br>
 これにより、Zabbixで障害を検知したら、自動で担当者へ障害が発生したことを電話で伝える事が可能になります。</p>
 
-<h2 id='releases'>
+<h2>
 <a name="%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%83%8E%E3%83%BC%E3%83%88" class="anchor" href="#%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%83%8E%E3%83%BC%E3%83%88"><span class="octicon octicon-link"></span></a>リリースノート</h2>
 
 <p>2014/mm/dd ver.1.0 初公開  </p>
 
-<hr><h2 id='file'>
+<hr><h2>
 <a name="%E4%BD%BF%E7%94%A8%E3%81%99%E3%82%8B%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB" class="anchor" href="#%E4%BD%BF%E7%94%A8%E3%81%99%E3%82%8B%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB"><span class="octicon octicon-link"></span></a>使用するファイル</h2>
 
 <table>
@@ -76,91 +52,43 @@
 </tr></thead>
 <tbody>
 <tr>
-<td>call-request.php</td>
-<td>パラメータのチェックとtwilio_call関数（コール処理を実行する関数）へ引数を渡す処理を行う</td>
+<td>zabbix-twilio.php</td>
+<td>Twilioの電話処理を実行させる。</td>
 </tr>
 <tr>
-<td>call-function.php</td>
-<td>コール処理とログ出力処理を行う関数が定義されている</td>
+<td>config.php</td>
+<td>Twilioアカウント情報などのパラメータが設定されている。</td>
 </tr>
 <tr>
-<td>twilio_zabbix.php</td>
-<td>必要なパラメータが設定されている</td>
+<td>Twilio.php</td>
+<td>Twilio API library</td>
 </tr>
 <tr>
-<td>calllog.log</td>
-<td>ログ出力先ファイル。ログの出力形式については、表下に記載する。</td>
+<td>zabbix-twilio.php_yyyymmdd.log</td>
+<td>スクリプト実行時のログファイル。Twilioのメッセージ内容や、宛先などの情報を記録する。</td>
 </tr>
 <tr>
-<td>Serviceディレクトリ</td>
+<td>Twilioディレクトリ</td>
 <td>Twilio API library(PHP)のディレクトリ。 公式ページからダウンロードする。 <a href="https://github.com/twilio/twilio-php/archive/latest.zip">Twilio API Library(PHP)</a>
 </td>
 </tr>
+<tr>
+<td>ZabbixApiAbstract.class.php</td>
+<td>PhpZabbixApi library</td>
+</tr>
+<tr>
+<td>ZabbixApi.class.php</td>
+<td>PhpZabbixApi library</td>
+</tr>
 </tbody>
-</table><h2 id='filedescription'>
+</table><h2>
 <a name="%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E8%AA%AC%E6%98%8E" class="anchor" href="#%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E8%AA%AC%E6%98%8E"><span class="octicon octicon-link"></span></a>ファイル説明</h2>
 
 <h3>
-<a name="call-requestphp" class="anchor" href="#call-requestphp"><span class="octicon octicon-link"></span></a>call-request.php</h3>
+<a name="zabbix-twiliophp" class="anchor" href="#zabbix-twiliophp"><span class="octicon octicon-link"></span></a>zabbix-twilio.php</h3>
 
-<p>call-request.phpは、渡された引数とtwilio_zabbix.phpのパラメータの確認を行った後に、コール処理を行う関数を実行します。<br>
-引数などの確認で問題があった場合は、以下のエラー番号を返します。</p>
-
-<table>
-<thead><tr>
-<th>エラー番号</th>
-<th>エラー内容</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>call-request.phpに渡された引数の数に誤りがある</td>
-</tr>
-<tr>
-<td>2</td>
-<td>call-request.phpに渡された第一引数のグループ名が$CALL_GROUP_ARRAYに存在しない</td>
-</tr>
-<tr>
-<td>3</td>
-<td>$FROM_NUMBERの最初一文字が+ではない</td>
-</tr>
-<tr>
-<td>4</td>
-<td>$FROM_NUMBERの+以降が数値ではない</td>
-</tr>
-<tr>
-<td>5</td>
-<td>$CALL_GROUP_ARRAY['グループ名']['REPEAT']の値が数値ではない</td>
-</tr>
-<tr>
-<td>6</td>
-<td>$CALL_TIMEの値が数値ではない</td>
-</tr>
-<tr>
-<td>7</td>
-<td>$SLEEP_TIMEの値が数値ではない</td>
-</tr>
-<tr>
-<td>8</td>
-<td>$MESSAGE_REPEATの値が数値ではない</td>
-</tr>
-<tr>
-<td>9</td>
-<td>$MESSAGESに含まれる$ARGVx$の数と引数の数(argv[0],argv[1]を除く)が一致しない</td>
-</tr>
-<tr>
-<td>10</td>
-<td>$CALL_GROUP_ARRAY['グループ名']['NUMBER_LIST']の値が数値ではない</td>
-</tr>
-<tr>
-<td>11</td>
-<td>$CALL_GROUP_ARRAY['グループ名']['NUMBER_LIST']の値が日本向けの電話番号ではない</td>
-</tr>
-</tbody>
-</table><h3>
-<a name="call-functionphp" class="anchor" href="#call-functionphp"><span class="octicon octicon-link"></span></a>call-function.php</h3>
-
-<p>call-function.phpには、以下の関数が定義されています。関数に渡している引数については、下記の表を参照してください。</p>
+<p>zabbix-twilio.phpには、以下の関数が定義されています。
+関数に渡している引数については、下記の表を参照してください。</p>
 
 <table>
 <thead><tr>
@@ -169,16 +97,39 @@
 </tr></thead>
 <tbody>
 <tr>
-<td>twilio_call ($client, $GROUP_NAME, $CALL_COUNT, $FROM_NUMBER, $NUMBER_LIST_NUMBER, $twilioMessages, $CALL_TIME, $SLEEP_TIME, $ARGV_COUNT)</td>
-<td>引数を元に、電話を掛ける処理を行う。</td>
+<td>TwiML_notice</td>
+<td>スクリプト実行時に初回に相手にメッセージを流す処理</td>
 </tr>
 <tr>
-<td>twilio_log ($client, $call, $GROUP_NAME, $CALL_COUNT, $SLEEP_TIME, $ARGV_COUNT)</td>
-<td>電話を掛けた結果をログファイルに出力</td>
+<td>TwiML_Register</td>
+<td>Zabbixの障害対応コメントに対応した旨メッセージを記録</td>
 </tr>
 <tr>
-<td>error_log_message($error_message)</td>
-<td>ログファイルにエラー内容を書き込む</td>
+<td>TwiML_Retype</td>
+<td>キー操作を受付、初回メッセージ以外を相手に流す。</td>
+</tr>
+<tr>
+<td>__construct</td>
+<td>ログファイル作成を行う。</td>
+</tr>
+<tr>
+<td>log</td>
+<td>ログファイルへの出力処理を行う</td>
+</tr>
+</tbody>
+</table><table>
+<thead><tr>
+<th>EXIT番号</th>
+<th>内容</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>正常終了</td>
+</tr>
+<tr>
+<td>1</td>
+<td>異常終了</td>
 </tr>
 </tbody>
 </table><table>
@@ -188,43 +139,22 @@
 </tr></thead>
 <tbody>
 <tr>
-<td>$client</td>
-<td>TwilioのRESTクライアントインスタンス</td>
-</tr>
-<tr>
-<td>$GROUP_NAME</td>
+<td></td>
 <td>グループ名</td>
 </tr>
 <tr>
-<td>$CALL_COUNT</td>
-<td>何順目のコール処理かのカウント</td>
+<td></td>
+<td>ホスト名</td>
 </tr>
 <tr>
-<td>$NUMBER_LIST_NUMBER</td>
-<td>電話の宛先番号</td>
-</tr>
-<tr>
-<td>$twilioMessages</td>
-<td>流すメッセージ内容</td>
-</tr>
-<tr>
-<td>$ARGV_COUNT</td>
-<td>call-request.phpに渡された引数の数</td>
-</tr>
-<tr>
-<td>$call</td>
-<td>コール処理のオブジェクト</td>
-</tr>
-<tr>
-<td>$error_message</td>
-<td>エラーメッセージ</td>
+<td></td>
+<td>サービス名</td>
 </tr>
 </tbody>
 </table><h3>
-<a name="twilio_zabbixphp" class="anchor" href="#twilio_zabbixphp"><span class="octicon octicon-link"></span></a>twilio_zabbix.php</h3>
+<a name="configphp" class="anchor" href="#configphp"><span class="octicon octicon-link"></span></a>config.php</h3>
 
-<p>twilio_zabbix.phpは、call-request.phpにて使用するパラメータを設定しているファイルです。<br>
-パラメータを変更することで、連絡先電話番号や流すメッセージを設定できます。</p>
+<p>config.phpは、今回使用する下記パラメータを設定しているファイルです。  </p>
 
 <table>
 <thead><tr>
@@ -233,65 +163,41 @@
 </tr></thead>
 <tbody>
 <tr>
-<td>$ACCOUNT_SID</td>
-<td>TwilioアカウントのACCOUNT SID</td>
+<td>$LOG_FILE</td>
+<td>ログファイル出力先</td>
 </tr>
 <tr>
-<td>$AUTH_TOKEN</td>
-<td>TwilioアカウントのAUTH_TOKEN</td>
+<td>$URL</td>
+<td>Twilioサーバと通信を行う為の、外部公開されたWEBサーバに設置したスクリプトへのURL</td>
 </tr>
 <tr>
-<td>$FROM_NUMBER</td>
-<td>Twilioアカウントに紐づいたTwilioの電話番号</td>
+<td>$ZABBIX_API</td>
+<td>ZabbixAPIのファイルパス</td>
 </tr>
 <tr>
-<td>$CALL_GROUP_ARRAY['groupname']['REPEAT']</td>
-<td>下記'NUMBER_LIST'の連絡先へ順番に電話を掛け、応答がなかった場合に何回電話を掛けるか。</td>
+<td>$ZABBIX_USER</td>
+<td>Zabbixに登録されたユーザ名</td>
 </tr>
 <tr>
-<td>$CALL_GROUP_ARRAY['groupname']['NUMBER_LIST']</td>
-<td>連絡先の電話番号(国際電話番号の形式)。連絡先は",(カンマ)"区切りで複数設定できる。例を表下に記載する。</td>
-</tr>
-<tr>
-<td>$CALL_TIME</td>
-<td>何秒間コールするか</td>
-</tr>
-<tr>
-<td>$SLEEP_TIME</td>
-<td>電話の応答がなかった場合に次の電話番号にコールするまでの待機時間（秒）</td>
-</tr>
-<tr>
-<td>$MESSAGE_REPEAT</td>
-<td>$MESSAGESの内容を流す回数</td>
-</tr>
-<tr>
-<td>$MESSAGES</td>
-<td>電話応答があった場合に流すメッセージを設定。 引数の値をメッセージに含めたい場合は、置き換える部分に$ARGV2$,$ARGV3$のように置き換え文字列を設定する。置き換え文字列は'$ARGVx$'の形式で、'x'の部分は1からの連番を設定し、メッセージの中で同じ番号は使用できない。 メッセージ中で連続した数字"10-1234-5678"があった場合、発音が"ジュウ センニヒャクサンジュウヨン ゴセンロッピャクナナジュウハチ"となるので、句読点などを入れて分割する必要がある。</td>
+<td>$ZABBIX_PASS</td>
+<td>Zabbixに登録されたユーザのパスワード</td>
 </tr>
 </tbody>
-</table><blockquote>
-<p>例）<br>
-$CALL_GROUP_ARRAY['group1']['REPEAT']='2';<br>
-$CALL_GROUP_ARRAY['group1']['NUMBER_LIST']='810123456789,811234567890';<br>
-$CALL_GROUP_ARRAY['group2']['REPEAT']='3';<br>
-$CALL_GROUP_ARRAY['group2']['NUMBER_LIST']='810123456789,811234567890';  </p>
-</blockquote>
+</table><h3>
+<a name="zabbix-twiliophp_yyyymmddlog" class="anchor" href="#zabbix-twiliophp_yyyymmddlog"><span class="octicon octicon-link"></span></a>zabbix-twilio.php_yyyymmdd.log</h3>
 
-<h3>
-<a name="callloglog" class="anchor" href="#callloglog"><span class="octicon octicon-link"></span></a>calllog.log</h3>
-
-<p>calllog.logは、Twilioのコール結果や、引数確認等のエラー内容を下記の形式で書き込まれます。</p>
+<p>zabbix-twilio.php_yyyymmdd.logは、Twilioの電話処理結果や、引数確認等のエラー内容を下記の形式で書き込まれます。</p>
 
 <blockquote>
 <p>ログ形式：<br>
 日時は、"yyyy/mm/dd hh:mm:ss"の書式で出力します。<br>
 ・エラーの場合<br>
 発生日時 エラー内容<br>
-・Twilioのコール結果<br>
-発生日時 グループ名 FROM TO コール開始時間 コール終了時間 コールリトライ回数 コールステータス sleep_time call-request.phpが受け取った引数の数  </p>
+・処理が正常に行われた場合
+発生日時 Twilioの電話処理履歴から取得できるすべての情報。</p>
 </blockquote>
 
-<h2 id='installation'>
+<h2>
 <a name="%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E8%A8%AD%E7%BD%AE%E5%A0%B4%E6%89%80" class="anchor" href="#%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E8%A8%AD%E7%BD%AE%E5%A0%B4%E6%89%80"><span class="octicon octicon-link"></span></a>ファイル設置場所</h2>
 
 <p>各ファイルは、下記のように設置する必要があります。（ログファイルは、スクリプトを実行すると自動で作成されます。）</p>
@@ -303,69 +209,32 @@ $CALL_GROUP_ARRAY['group2']['NUMBER_LIST']='810123456789,811234567890';  </p>
 </tr></thead>
 <tbody>
 <tr>
-<td>/var/www/html/rest/</td>
-<td>call-request.php、call-function.php、Serviceディレクトリ</td>
+<td>/var/www/html/</td>
+<td>zabbix-twilio.php、config.php</td>
 </tr>
 <tr>
-<td>/var/lib/zabbix/</td>
-<td>twilio_zabbix.php</td>
+<td>/var/www/html/logs/</td>
+<td>zabbix-twilio.php_yyyymmdd.log</td>
 </tr>
 <tr>
-<td>/var/log/zabbix/</td>
-<td>calllog.log</td>
+<td>/usr/lib/zabbix/alertscripts/zabbix-twilio/lib/twilio/</td>
+<td>Twilio.php、Twilioディレクトリ（Twilio API library）</td>
+</tr>
+<tr>
+<td>/usr/lib/zabbix/alertscripts/zabbix-twilio/lib/PhpZabbixApi/</td>
+<td>ZabbixApiAbstract.class.php、ZabbixApi.class.php</td>
 </tr>
 </tbody>
-</table><h2 id='confirmation'>
+</table><h2>
 <a name="%E5%8B%95%E4%BD%9C%E7%A2%BA%E8%AA%8D%E7%92%B0%E5%A2%83" class="anchor" href="#%E5%8B%95%E4%BD%9C%E7%A2%BA%E8%AA%8D%E7%92%B0%E5%A2%83"><span class="octicon octicon-link"></span></a>動作確認環境</h2>
 
 <ul>
 <li>Zabbix 2.2.2</li>
-<li>PHP 5.5.7</li>
-</ul><h2 id='usage'>
+<li>PHP 5.3.3</li>
+</ul><h2>
 <a name="%E5%AE%9F%E8%A1%8C%E6%96%B9%E6%B3%95" class="anchor" href="#%E5%AE%9F%E8%A1%8C%E6%96%B9%E6%B3%95"><span class="octicon octicon-link"></span></a>実行方法</h2>
 
-<p>Zabbixから[設定]-&gt;[アクション]-&gt;[アクションの実行内容]にて、下記のようにcall-request.phpに引数として、"グループ名"、"ホスト名"、"トリガー名"を渡して実行するようにしてください。</p>
-
-<p><img src="https://github.com/d-watanabe/test/raw/master/zabbix1.PNG" alt="zabbix01"></p>
-
-<pre><code>/usr/bin/php /var/www/html/rest/call-request.php "group1" "{HOST.NAME1}" "{TRIGGER.NAME}"
-</code></pre>
-
-<h3 id='case'>
-<a name="%E3%83%88%E3%83%A9%E3%83%96%E3%83%AB%E4%BA%8B%E4%BE%8B" class="anchor" href="#%E3%83%88%E3%83%A9%E3%83%96%E3%83%AB%E4%BA%8B%E4%BE%8B"><span class="octicon octicon-link"></span></a>トラブル事例</h3>
-
-<hr><p>事例1．Zabbixでアラートを検知したが、スクリプトが実行されませんでした。<br>
-calllog.logには特にエラーが書き込まれていなかった為、CLIで実行したところ、以下のエラーが表示されました。<br>
-解決する為にはどこを確認すれば良いでしょうか。  </p>
-
-<pre><code>sh: -c: line 0: unexpected EOF while looking for matching `''  
-sh: -c: line 1: syntax error: unexpected end of file
-</code></pre>
-
-<p>解決策.twilio_zabbix.phpのTwilioアカウント情報に誤りがある場合に発生することが確認されています。<br>
-twilio_zabbix.phpの以下の項目に誤りがないか確認し、修正してください。<br>
-なお、後日calllog.logにエラーが書き込むように修正し、上記エラーメッセージが表示されないようにする予定です。  </p>
-
-<table>
-<thead><tr>
-<th>パラメータ名</th>
-<th>説明</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>$ACCOUNT_SID</td>
-<td>TwilioアカウントのACCOUNT SID</td>
-</tr>
-<tr>
-<td>$AUTH_TOKEN</td>
-<td>TwilioアカウントのAUTH_TOKEN</td>
-</tr>
-<tr>
-<td>$FROM_NUMBER</td>
-<td>Twilioアカウントに紐づいたTwilioの電話番号</td>
-</tr>
-</tbody>
-</table><hr><h4 id='contact'>
+<hr><h4>
 <a name="%E9%80%A3%E7%B5%A1%E5%85%88" class="anchor" href="#%E9%80%A3%E7%B5%A1%E5%85%88"><span class="octicon octicon-link"></span></a>連絡先</h4>
 
 <p>mail : </p>
