@@ -40,10 +40,12 @@
 <h2>
 <a name="%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%83%8E%E3%83%BC%E3%83%88" class="anchor" href="#%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%83%8E%E3%83%BC%E3%83%88"><span class="octicon octicon-link"></span></a>リリースノート</h2>
 
-<p>2014/mm/dd ver.1.0 初公開  </p>
+<p>2014/mm/dd ver.1.0 公開  </p>
 
 <hr><h2>
 <a name="%E4%BD%BF%E7%94%A8%E3%81%99%E3%82%8B%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB" class="anchor" href="#%E4%BD%BF%E7%94%A8%E3%81%99%E3%82%8B%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB"><span class="octicon octicon-link"></span></a>使用するファイル</h2>
+
+<p>※config.phpが2つありますが、それぞれ別の場所に設置して使用します。</p>
 
 <table>
 <thead><tr>
@@ -52,25 +54,28 @@
 </tr></thead>
 <tbody>
 <tr>
-<td>zabbix-twilio.php</td>
-<td>Twilioの電話処理を実行させる。</td>
+<td>twilio-call.php</td>
+<td>引数チェック及び電話を掛ける処理を実行する。</td>
 </tr>
 <tr>
 <td>config.php</td>
-<td>Twilioアカウント情報などのパラメータが設定されている。</td>
+<td>Twilioアカウント情報などが設定されている。</td>
 </tr>
 <tr>
-<td>Twilio.php</td>
-<td>Twilio API library</td>
+<td>config.php</td>
+<td>ZabbixAPIを使用するためのユーザ情報などが設定されている。</td>
+</tr>
+<tr>
+<td>yyyymmdd.log</td>
+<td>スクリプト実行時のログファイル。エラー内容や、宛先などの情報を記録する。</td>
+</tr>
+<tr>
+<td>zabbix-twilio.php</td>
+<td>TwilioのIVR処理を実行させる。</td>
 </tr>
 <tr>
 <td>zabbix-twilio.php_yyyymmdd.log</td>
 <td>スクリプト実行時のログファイル。Twilioのメッセージ内容や、宛先などの情報を記録する。</td>
-</tr>
-<tr>
-<td>Twilioディレクトリ</td>
-<td>Twilio API library(PHP)のディレクトリ。 公式ページからダウンロードする。 <a href="https://github.com/twilio/twilio-php/archive/latest.zip">Twilio API Library(PHP)</a>
-</td>
 </tr>
 <tr>
 <td>ZabbixApiAbstract.class.php</td>
@@ -80,15 +85,23 @@
 <td>ZabbixApi.class.php</td>
 <td>PhpZabbixApi library</td>
 </tr>
+<tr>
+<td>Twilio.php</td>
+<td>Twilio API library</td>
+</tr>
+<tr>
+<td>Twilioディレクトリ</td>
+<td>Twilio API library(PHP)のディレクトリ。 公式ページからダウンロードする。 <a href="https://github.com/twilio/twilio-php/archive/latest.zip">Twilio API Library(PHP)</a>
+</td>
+</tr>
 </tbody>
 </table><h2>
 <a name="%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E8%AA%AC%E6%98%8E" class="anchor" href="#%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E8%AA%AC%E6%98%8E"><span class="octicon octicon-link"></span></a>ファイル説明</h2>
 
 <h3>
-<a name="zabbix-twiliophp" class="anchor" href="#zabbix-twiliophp"><span class="octicon octicon-link"></span></a>zabbix-twilio.php</h3>
+<a name="twilio-callphp" class="anchor" href="#twilio-callphp"><span class="octicon octicon-link"></span></a>twilio-call.php</h3>
 
-<p>zabbix-twilio.phpには、以下の関数が定義されています。
-関数に渡している引数については、下記の表を参照してください。</p>
+<p>渡された引数に誤りがないかチェックし、問題なければ電話を掛ける処理を実行します。</p>
 
 <table>
 <thead><tr>
@@ -97,24 +110,12 @@
 </tr></thead>
 <tbody>
 <tr>
-<td>TwiML_notice</td>
-<td>スクリプト実行時に初回に相手にメッセージを流す処理</td>
-</tr>
-<tr>
-<td>TwiML_Register</td>
-<td>Zabbixの障害対応コメントに対応した旨メッセージを記録</td>
-</tr>
-<tr>
-<td>TwiML_Retype</td>
-<td>キー操作を受付、初回メッセージ以外を相手に流す。</td>
-</tr>
-<tr>
 <td>__construct</td>
 <td>ログファイル作成を行う。</td>
 </tr>
 <tr>
 <td>log</td>
-<td>ログファイルへの出力処理を行う</td>
+<td>ログファイルへの出力処理を行う。</td>
 </tr>
 </tbody>
 </table><table>
@@ -129,32 +130,70 @@
 </tr>
 <tr>
 <td>1</td>
-<td>異常終了</td>
+<td>info</td>
+</tr>
+<tr>
+<td>2</td>
+<td>エラー</td>
 </tr>
 </tbody>
-</table><table>
+</table><h3>
+<a name="zabbix-twiliophp" class="anchor" href="#zabbix-twiliophp"><span class="octicon octicon-link"></span></a>zabbix-twilio.php</h3>
+
+<p>このファイルで、ユーザーのキー操作を判定し、処理を分岐させています。<br>
+処理の分岐は、初回のメッセージのときは、"キー 1"を押すと、ユーザーが対応できるという判断をし、Zabbixの該当のアラートに障害対応コメントを書き込み処理を終了します。<br>
+次のユーザーがいた場合は、次のユーザーへ電話はかけません。<br>
+その他のキーを押した場合は、再度入力を促すメッセージを流します。<br>
+また、メッセージを流した後にしばらくキーの入力がなかった場合は、通話を切ります。  </p>
+
+<p>なおこのファイルには、以下の関数が定義されています。</p>
+
+<table>
 <thead><tr>
-<th>引数名</th>
+<th>関数名</th>
 <th>説明</th>
 </tr></thead>
 <tbody>
 <tr>
-<td></td>
-<td>グループ名</td>
+<td>TwiML_notice</td>
+<td>スクリプト実行時に初回に相手にメッセージを流す処理を行う。</td>
 </tr>
 <tr>
-<td></td>
-<td>ホスト名</td>
+<td>TwiML_Register</td>
+<td>Zabbixの障害対応コメントに対応した旨メッセージを記録する。</td>
 </tr>
 <tr>
-<td></td>
-<td>サービス名</td>
+<td>TwiML_Retype</td>
+<td>キー操作を受付、初回メッセージ以外を相手に流す。</td>
+</tr>
+<tr>
+<td>__construct</td>
+<td>ログファイル作成を行う。</td>
+</tr>
+<tr>
+<td>log</td>
+<td>ログファイルへの出力処理を行う。</td>
+</tr>
+</tbody>
+</table><table>
+<thead><tr>
+<th>EXIT番号</th>
+<th>内容</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>正常終了</td>
+</tr>
+<tr>
+<td>1</td>
+<td>エラー</td>
 </tr>
 </tbody>
 </table><h3>
 <a name="configphp" class="anchor" href="#configphp"><span class="octicon octicon-link"></span></a>config.php</h3>
 
-<p>config.phpは、今回使用する下記パラメータを設定しているファイルです。  </p>
+<p>Twilioアカウント情報などが設定されています。</p>
 
 <table>
 <thead><tr>
@@ -184,17 +223,63 @@
 </tr>
 </tbody>
 </table><h3>
-<a name="zabbix-twiliophp_yyyymmddlog" class="anchor" href="#zabbix-twiliophp_yyyymmddlog"><span class="octicon octicon-link"></span></a>zabbix-twilio.php_yyyymmdd.log</h3>
+<a name="configphp-1" class="anchor" href="#configphp-1"><span class="octicon octicon-link"></span></a>config.php</h3>
 
-<p>zabbix-twilio.php_yyyymmdd.logは、Twilioの電話処理結果や、引数確認等のエラー内容を下記の形式で書き込まれます。</p>
+<p>ZabbixAPIを使用するためのユーザ情報などが設定されています。</p>
+
+<table>
+<thead><tr>
+<th>パラメータ名</th>
+<th>説明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>$LOG_FILE</td>
+<td>ログファイル出力先</td>
+</tr>
+<tr>
+<td>$URL</td>
+<td>Twilioサーバと通信を行う為の、外部公開されたWEBサーバに設置したスクリプトへのURL</td>
+</tr>
+<tr>
+<td>$ZABBIX_API</td>
+<td>ZabbixAPIのファイルパス</td>
+</tr>
+<tr>
+<td>$ZABBIX_USER</td>
+<td>Zabbixに登録されたユーザ名</td>
+</tr>
+<tr>
+<td>$ZABBIX_PASS</td>
+<td>Zabbixに登録されたユーザのパスワード</td>
+</tr>
+</tbody>
+</table><h3>
+<a name="yyyymmddlog" class="anchor" href="#yyyymmddlog"><span class="octicon octicon-link"></span></a>yyyymmdd.log</h3>
+
+<p>Twilioの電話処理結果や、エラー内容を下記の形式で書き込まれます。</p>
 
 <blockquote>
 <p>ログ形式：<br>
 日時は、"yyyy/mm/dd hh:mm:ss"の書式で出力します。<br>
 ・エラーの場合<br>
-発生日時 エラー内容<br>
-・処理が正常に行われた場合
-発生日時 Twilioの電話処理履歴から取得できるすべての情報。</p>
+発生日時 プロセスID エラー内容<br>
+・処理が正常に行われた場合<br>
+発生日時 プロセスID 宛先電話番号 ステータス  </p>
+</blockquote>
+
+<h3>
+<a name="zabbix-twiliophp_yyyymmddlog" class="anchor" href="#zabbix-twiliophp_yyyymmddlog"><span class="octicon octicon-link"></span></a>zabbix-twilio.php_yyyymmdd.log</h3>
+
+<p>Twilioの電話処理結果や、エラー内容を下記の形式で書き込まれます。</p>
+
+<blockquote>
+<p>ログ形式：<br>
+日時は、"yyyy/mm/dd hh:mm:ss"の書式で出力します。<br>
+・エラーの場合<br>
+発生日時 プロセスID エラー内容<br>
+・処理が正常に行われた場合<br>
+発生日時 プロセスID Twilioの電話履歴の情報  </p>
 </blockquote>
 
 <h2>
@@ -208,6 +293,14 @@
 <th>ファイル名</th>
 </tr></thead>
 <tbody>
+<tr>
+<td>/usr/lib/zabbix/alertscripts/zabbix-twilio/</td>
+<td>twilio-call.php、config.php</td>
+</tr>
+<tr>
+<td>/usr/lib/zabbix/alertscripts/zabbix-twilio/logs/</td>
+<td>yyyymmdd.log</td>
+</tr>
 <tr>
 <td>/var/www/html/</td>
 <td>zabbix-twilio.php、config.php</td>
@@ -233,6 +326,39 @@
 <li>PHP 5.3.3</li>
 </ul><h2>
 <a name="%E5%AE%9F%E8%A1%8C%E6%96%B9%E6%B3%95" class="anchor" href="#%E5%AE%9F%E8%A1%8C%E6%96%B9%E6%B3%95"><span class="octicon octicon-link"></span></a>実行方法</h2>
+
+<hr><p>1.新規メディアタイプを作成する。<br>
+まずは、Twilioで電話を掛ける為に[メディアタイプ]を追加してください。  </p>
+
+<p>[管理]&gt;[メディアタイプ]&gt;[メディアタイプの作成]  </p>
+
+<p>[名前]：Twilio<br>
+[タイプ]：スクリプト  </p>
+
+<h2>
+<a name="%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88%E5%90%8Dzabbix-twiliotwilio-callphp--" class="anchor" href="#%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88%E5%90%8Dzabbix-twiliotwilio-callphp--"><span class="octicon octicon-link"></span></a>[スクリプト名]：zabbix-twilio/twilio-call.php  </h2>
+
+<p>2.ユーザーにメディアタイプを追加する。<br>
+ [管理]&gt;[ユーザー]&gt;[ユーザー]<br>
+ ユーザーに、先ほど作成したメディア【tel】を追加してください。<br>
+ [送信先]をユーザーの電話番号を設定してください。  </p>
+
+<h2>
+<a name="-%E4%BB%8A%E5%9B%9E%E3%81%AF%E6%8B%85%E5%BD%93%E8%80%85%E3%81%8C3%E5%90%8D%E3%81%84%E3%82%8B%E6%83%B3%E5%AE%9A%E3%81%A7%E8%A8%AD%E5%AE%9A%E3%81%97%E3%81%A6%E3%81%84%E3%81%BE%E3%81%99" class="anchor" href="#-%E4%BB%8A%E5%9B%9E%E3%81%AF%E6%8B%85%E5%BD%93%E8%80%85%E3%81%8C3%E5%90%8D%E3%81%84%E3%82%8B%E6%83%B3%E5%AE%9A%E3%81%A7%E8%A8%AD%E5%AE%9A%E3%81%97%E3%81%A6%E3%81%84%E3%81%BE%E3%81%99"><span class="octicon octicon-link"></span></a> 今回は、担当者が3名いる想定で設定しています。</h2>
+
+<p>3.アクションの設定を行う。<br>
+[設定]&gt;[アクション]&gt;[アクションの作成]<br>
+[アクションの作成]から、アクションの実行条件を指定し、<br>
+[アクションの実行内容]で、画像のように設定してください。  </p>
+
+<p>画像のようにステップを増やすことで、順番に電話を掛けることができます。  </p>
+
+<p>実行内容は、[メッセージの送信]<br>
+次のメディアのみ使用[tel]  </p>
+
+<hr><p>この状態で、障害を検知すると、User1-&gt;User2-&gt;User3の順番に電話を掛けます。<br>
+下の画像の例では、User2が応答した例になっています。<br>
+黒塗りしている部分は、User2の電話番号になります。  </p>
 
 <hr><h4>
 <a name="%E9%80%A3%E7%B5%A1%E5%85%88" class="anchor" href="#%E9%80%A3%E7%B5%A1%E5%85%88"><span class="octicon octicon-link"></span></a>連絡先</h4>
